@@ -160,21 +160,26 @@ function installSkill() {
 // ─── Step 3: Configure status line (with animation refresh) ─────────────────
 
 function installStatusLine(settings: Record<string, any>) {
-  const statusScript = join(PROJECT_ROOT, "statusline", "buddy-status.sh");
+  // claude-buddy-cn default: single-line compact statusLine
+  // (buddy-status-compact.sh). We observed on Claude Code v2.1.112 that a
+  // multi-line statusLine combined with any refresh interval triggers a TUI
+  // redraw bug: chat content duplicates as the statusLine rows repaint.
+  // Single-line output sidesteps that entirely.
+  // Want the full ASCII art? Change `statusLine.command` in
+  // ~/.claude/settings.json to point at buddy-status.sh instead.
+  const statusScript = join(PROJECT_ROOT, "statusline", "buddy-status-compact.sh");
 
   settings.statusLine = {
     type: "command",
     command: toUnixPath(statusScript),
     padding: 1,
-    // claude-buddy-cn: default 10s (balanced between animation smoothness
-    // and CPU / battery usage). Upstream defaulted to 1s — too aggressive
-    // on laptops; bun re-spawns every second drove fans hard. User can
-    // still set this to 1 if they want the fully animated experience,
-    // or 20+ to effectively freeze idle animation for maximum savings.
+    // 10s (balanced). Upstream defaulted to 1s — too aggressive on laptops;
+    // bun re-spawns every second and drove fans hard. Bump to 20+ for max
+    // savings, or down to 1 if you want the fully animated experience.
     refreshInterval: 10,
   };
 
-  ok("Status line configured (refresh every 10s)");
+  ok("Status line configured (single-line compact, refresh every 10s)");
 }
 
 // The tmux popup mode was removed in favour of the status line / buddy-shell
