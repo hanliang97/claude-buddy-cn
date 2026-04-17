@@ -160,26 +160,32 @@ function installSkill() {
 // ─── Step 3: Configure status line (with animation refresh) ─────────────────
 
 function installStatusLine(settings: Record<string, any>) {
-  // claude-buddy-cn default: single-line compact statusLine
-  // (buddy-status-compact.sh). We observed on Claude Code v2.1.112 that a
-  // multi-line statusLine combined with any refresh interval triggers a TUI
-  // redraw bug: chat content duplicates as the statusLine rows repaint.
-  // Single-line output sidesteps that entirely.
-  // Want the full ASCII art? Change `statusLine.command` in
-  // ~/.claude/settings.json to point at buddy-status.sh instead.
-  const statusScript = join(PROJECT_ROOT, "statusline", "buddy-status-compact.sh");
+  // claude-buddy-cn default: the upstream multi-line ASCII-art statusLine
+  // (buddy-status.sh). The animated pet is the whole point — compact mode
+  // is just emoji and feels hollow.
+  //
+  // Known issue: on some Claude Code versions (observed on v2.1.112) the
+  // multi-line statusLine combined with frequent refresh triggers a TUI
+  // redraw bug where chat content appears to duplicate in the terminal.
+  // If you hit that, switch to the single-line compact version by editing
+  // ~/.claude/settings.json:
+  //     "command": "/path/to/claude-buddy-cn/statusline/buddy-status-compact.sh"
+  // buddy-status-compact.sh ships in the repo for exactly this fallback.
+  const statusScript = join(PROJECT_ROOT, "statusline", "buddy-status.sh");
 
   settings.statusLine = {
     type: "command",
     command: toUnixPath(statusScript),
     padding: 1,
-    // 10s (balanced). Upstream defaulted to 1s — too aggressive on laptops;
-    // bun re-spawns every second and drove fans hard. Bump to 20+ for max
-    // savings, or down to 1 if you want the fully animated experience.
+    // 10s (balanced). Upstream defaulted to 1s — too aggressive on
+    // laptops; bun re-spawns every second and drove fans hard. Bump to
+    // 20-60 for max savings (idle animation basically freezes but pet
+    // reactions still show on next refresh), or down to 1 if you want
+    // the fully animated experience and don't mind the fan.
     refreshInterval: 10,
   };
 
-  ok("Status line configured (single-line compact, refresh every 10s)");
+  ok("Status line configured (multi-line ASCII art, refresh every 10s)");
 }
 
 // The tmux popup mode was removed in favour of the status line / buddy-shell
