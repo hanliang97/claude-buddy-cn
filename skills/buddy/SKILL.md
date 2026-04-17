@@ -2,7 +2,7 @@
 name: buddy
 description: "Show, pet, or manage your coding companion. Use when the user types /buddy or mentions their companion by name."
 argument-hint: "[show|pet|stats|help|off|on|rename <name>|personality <text>|achievements|summon [slot]|save [slot]|list|dismiss <slot>|pick|frequency [seconds]|style [classic|round]|position [top|left]|rarity [on|off]|statusline [on|off]|uninstall]"
-allowed-tools: mcp__claude_buddy__*
+allowed-tools: ["mcp__claude_buddy__*"]
 ---
 
 # Buddy — Your Coding Companion
