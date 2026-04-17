@@ -14,6 +14,7 @@ import { resolve, dirname, join } from "path";
 import { generateBones, renderBuddy, renderFace, RARITY_STARS } from "../server/engine.ts";
 import {
   claudeConfigDir,
+  claudeCommandPath,
   claudeSettingsPath,
   claudeSkillDir,
   claudeUserConfigPath,
@@ -135,13 +136,25 @@ function installMcp() {
   ok(`MCP server registered in ${CLAUDE_JSON_PATH}`);
 }
 
-// ─── Step 2: Install skill ──────────────────────────────────────────────────
+// ─── Step 2: Install skill + slash command ──────────────────────────────────
+// Claude Code v2.1.x reads user slash commands from ~/.claude/commands/*.md
+// NOT from ~/.claude/skills/<name>/SKILL.md (that location is for plugin-scoped
+// skills, which require the plugin system to discover them). We install to
+// BOTH locations so /buddy works directly, while the skill file still exists
+// for any tooling that scans the skills/ tree.
 
 function installSkill() {
   const srcSkill = join(PROJECT_ROOT, "skills", "buddy", "SKILL.md");
   mkdirSync(BUDDY_DIR, { recursive: true });
   cpSync(srcSkill, join(BUDDY_DIR, "SKILL.md"), { force: true });
   ok(`Skill installed: ${join(BUDDY_DIR, "SKILL.md")}`);
+
+  // Also install as a top-level slash command — this is what actually
+  // makes /buddy appear in the command picker on Claude Code v2.1.x.
+  const cmdPath = claudeCommandPath("buddy");
+  mkdirSync(dirname(cmdPath), { recursive: true });
+  cpSync(srcSkill, cmdPath, { force: true });
+  ok(`Slash command installed: ${cmdPath}`);
 }
 
 // ─── Step 3: Configure status line (with animation refresh) ─────────────────

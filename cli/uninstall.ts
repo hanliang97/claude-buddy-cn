@@ -6,6 +6,7 @@ import { readFileSync, writeFileSync, existsSync, rmSync, readdirSync } from "fs
 import { join } from "path";
 import {
   buddyStateDir,
+  claudeCommandPath,
   claudeSettingsPath,
   claudeSkillDir,
   claudeUserConfigPath,
@@ -20,6 +21,7 @@ function warn(msg: string) { console.log(`${YELLOW}⚠${NC}  ${msg}`); }
 
 const SETTINGS_FILE = claudeSettingsPath();
 const SKILL_DIR = claudeSkillDir("buddy");
+const COMMAND_FILE = claudeCommandPath("buddy");
 const STATE_DIR = buddyStateDir();
 const CLAUDE_JSON_PATH = claudeUserConfigPath();
 
@@ -104,6 +106,14 @@ if (existsSync(SKILL_DIR)) {
   ok("Skill removed");
 } else {
   warn("Skill not found (already removed)");
+}
+
+// Remove slash command
+if (existsSync(COMMAND_FILE)) {
+  rmSync(COMMAND_FILE);
+  ok(`Slash command removed: ${COMMAND_FILE}`);
+} else {
+  warn("Slash command not found (already removed)");
 }
 
 // Keep state dir (companion data) — user might want it back.

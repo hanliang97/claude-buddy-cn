@@ -56,6 +56,15 @@ export function claudeSkillDir(name: string): string {
 }
 
 /**
+ * Path to a slash-command .md file under Claude Code's commands/ directory.
+ * Claude Code v2.1.x discovers user slash commands from ~/.claude/commands/*.md
+ * (single-file format), independent of the plugin/skill system.
+ */
+export function claudeCommandPath(name: string): string {
+  return join(claudeConfigDir(), "commands", `${name}.md`);
+}
+
+/**
  * Resolve the path to Claude Code's user-config file (.claude.json).
  *
  * When CLAUDE_CONFIG_DIR is set the file lives inside it — we always
