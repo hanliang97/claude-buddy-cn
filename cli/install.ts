@@ -166,10 +166,15 @@ function installStatusLine(settings: Record<string, any>) {
     type: "command",
     command: toUnixPath(statusScript),
     padding: 1,
-    refreshInterval: 1,  // 1 second — drives the buddy animation
+    // claude-buddy-cn: default 10s (balanced between animation smoothness
+    // and CPU / battery usage). Upstream defaulted to 1s — too aggressive
+    // on laptops; bun re-spawns every second drove fans hard. User can
+    // still set this to 1 if they want the fully animated experience,
+    // or 20+ to effectively freeze idle animation for maximum savings.
+    refreshInterval: 10,
   };
 
-  ok("Status line configured (with animation refresh)");
+  ok("Status line configured (refresh every 10s)");
 }
 
 // The tmux popup mode was removed in favour of the status line / buddy-shell
