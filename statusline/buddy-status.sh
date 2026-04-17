@@ -288,10 +288,20 @@ fi
 ART_LINES=("$L1" "$L2" "$L3")
 [ -n "$L4" ] && ART_LINES+=("$L4")
 
-# Center the name
-NAME_LEN=${#NAME}
-ART_CENTER=4
-NAME_PAD=$(( ART_CENTER - NAME_LEN / 2 ))
+# ─── Center the name (CJK-aware) ─────────────────────────────────────────────
+# Compute actual display widths: ART_WIDTH = max terminal-column-width of any
+# art line; NAME_WIDTH = terminal-column-width of the buddy name (Chinese
+# names display 2 cols per char, so bash's ${#name} undercounts).
+ART_WIDTH=0
+for _line in "${ART_LINES[@]}"; do
+    _w=$(disp_width "$_line")
+    [ "$_w" -gt "$ART_WIDTH" ] && ART_WIDTH=$_w
+done
+NAME_DISP_WIDTH=$(disp_width "$NAME")
+# Ceiling division for odd-diff cases so the visual center lands slightly
+# RIGHT of the art's leftmost column — compensates for art shapes that are
+# wider on the bottom (e.g. penguin's /(   )\ vs  .---. top).
+NAME_PAD=$(( (ART_WIDTH - NAME_DISP_WIDTH + 1) / 2 ))
 [ "$NAME_PAD" -lt 0 ] && NAME_PAD=0
 NAME_LINE="$(printf '%*s%s' "$NAME_PAD" '' "$NAME")"
 
