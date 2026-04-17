@@ -71,6 +71,6 @@ describe("shipped plugin manifests", () => {
     // minimal (Claude Code may spawn MCP servers without the user's shell
     // profile sourced), so the exec may go through "$BUN" rather than bare
     // `bun`. Accept either form.
-    expect(contents).toMatch(/exec\s+(?:bun|"\$BUN")\b/);
+    expect(contents).toMatch(/exec\s+(?:bun\b|"\$BUN")/);
   });
 });
