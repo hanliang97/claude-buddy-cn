@@ -1,26 +1,30 @@
 {
-    "name": "claude-buddy",
-    "version": "0.3.0",
-    "description": "Permanent coding companion for Claude Code \u2014 survives any update. MCP-based terminal pet with ASCII art, stats, reactions, and personality.",
-    "author": {
-        "name": "1270011"
-    },
-    "license": "MIT",
-    "repository": "https://github.com/1270011/claude-buddy",
-    "homepage": "https://github.com/1270011/claude-buddy#readme",
-    "keywords": [
-        "claude-code",
-        "buddy",
-        "companion",
-        "mcp",
-        "terminal-pet",
-        "tamagotchi"
-    ],
-    "mcpServers": {
-        "claude-buddy": {
-            "type": "stdio",
-            "command": "${CLAUDE_PLUGIN_ROOT}/server/mcp-launcher.sh",
-            "args": []
-        }
+  "name": "claude-buddy-cn",
+  "version": "0.3.0-cn.1",
+  "description": "Claude Code 永久宠物伴侣（汉化版）· 基于 1270011/claude-buddy 的中文化 fork · MCP 终端宠物",
+  "author": {
+    "name": "hanliang97",
+    "url": "https://github.com/hanliang97"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/hanliang97/claude-buddy-cn",
+  "homepage": "https://github.com/hanliang97/claude-buddy-cn#readme",
+  "keywords": [
+    "buddy",
+    "chinese",
+    "claude-code",
+    "companion",
+    "mcp",
+    "tamagotchi",
+    "terminal-pet",
+    "zh-cn",
+    "汉化"
+  ],
+  "mcpServers": {
+    "claude-buddy": {
+      "type": "stdio",
+      "command": "${CLAUDE_PLUGIN_ROOT}/server/mcp-launcher.sh",
+      "args": []
     }
+  }
 }
