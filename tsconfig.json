@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["bun-types"],
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+
+    // Bun runs .ts files natively — we never emit JS, tsc is only used
+    // for typechecking (`tsc --noEmit`). These three options make the
+    // typechecker agree with how Bun actually loads the code.
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "jsx": "react-jsx"
+  },
+  "include": ["server/**/*.ts", "cli/**/*.ts", "cli/**/*.tsx"]
+}

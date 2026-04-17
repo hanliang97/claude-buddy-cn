@@ -1,0 +1,81 @@
+{
+  "name": "claude-buddy-cn",
+  "version": "0.3.0-cn.1",
+  "description": "Claude Code 永久宠物伴侣（汉化版）—— 基于 1270011/claude-buddy，所有反应和 AI 评语已中文化，并修复了 CJK 字符在状态栏的对齐问题",
+  "type": "module",
+  "bin": {
+    "claude-buddy": "./cli/index.ts"
+  },
+  "scripts": {
+    "server": "bun run server/index.ts",
+    "pick": "bun run cli/pick.ts",
+    "hunt": "bun run cli/hunt.ts",
+    "install-buddy": "bun run cli/install.ts",
+    "show": "bun run cli/show.ts",
+    "doctor": "bun run cli/doctor.ts",
+    "test-statusline": "bun run cli/test-statusline.ts",
+    "backup": "bun run cli/backup.ts",
+    "settings": "bun run cli/settings.ts",
+    "disable": "bun run cli/disable.ts",
+    "enable": "bun run cli/install.ts",
+    "upgrade": "bun run cli/upgrade.ts",
+    "uninstall": "bun run cli/uninstall.ts",
+    "help": "bun run cli/index.ts help",
+    "buddy-shell": "npx tsx cli/buddy-shell.ts",
+    "tui": "bun run cli/tui.tsx",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "server/",
+    "cli/",
+    "skills/",
+    "hooks/",
+    "statusline/",
+    ".claude-plugin/",
+    "!**/*.test.ts"
+  ],
+  "keywords": [
+    "claude-code",
+    "buddy",
+    "companion",
+    "mcp",
+    "terminal-pet",
+    "tamagotchi",
+    "chinese",
+    "中文",
+    "汉化",
+    "zh-cn"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hanliang97/claude-buddy-cn.git"
+  },
+  "homepage": "https://github.com/hanliang97/claude-buddy-cn#readme",
+  "bugs": {
+    "url": "https://github.com/hanliang97/claude-buddy-cn/issues"
+  },
+  "upstream": {
+    "name": "claude-buddy",
+    "repository": "https://github.com/1270011/claude-buddy",
+    "license": "MIT"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@homebridge/node-pty-prebuilt-multiarch": "^0.13.1",
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@xterm/addon-serialize": "^0.14.0",
+    "@xterm/headless": "^6.0.0",
+    "ink": "^7.0.0",
+    "react": "^19.2.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "bun-types": "^1.3.11",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  },
+  "trustedDependencies": [
+    "@homebridge/node-pty-prebuilt-multiarch"
+  ]
+}

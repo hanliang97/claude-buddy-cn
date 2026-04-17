@@ -1,0 +1,26 @@
+{
+    "name": "claude-buddy",
+    "version": "0.3.0",
+    "description": "Permanent coding companion for Claude Code \u2014 survives any update. MCP-based terminal pet with ASCII art, stats, reactions, and personality.",
+    "author": {
+        "name": "1270011"
+    },
+    "license": "MIT",
+    "repository": "https://github.com/1270011/claude-buddy",
+    "homepage": "https://github.com/1270011/claude-buddy#readme",
+    "keywords": [
+        "claude-code",
+        "buddy",
+        "companion",
+        "mcp",
+        "terminal-pet",
+        "tamagotchi"
+    ],
+    "mcpServers": {
+        "claude-buddy": {
+            "type": "stdio",
+            "command": "${CLAUDE_PLUGIN_ROOT}/server/mcp-launcher.sh",
+            "args": []
+        }
+    }
+}
