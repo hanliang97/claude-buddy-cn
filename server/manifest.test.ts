@@ -67,6 +67,10 @@ describe("shipped plugin manifests", () => {
 
     const contents = readFileSync(launcher, "utf8");
     expect(contents).toContain("command -v bun");
-    expect(contents).toMatch(/exec\s+bun\b/);
+    // claude-buddy-cn: launcher probes common bun install dirs when PATH is
+    // minimal (Claude Code may spawn MCP servers without the user's shell
+    // profile sourced), so the exec may go through "$BUN" rather than bare
+    // `bun`. Accept either form.
+    expect(contents).toMatch(/exec\s+(?:bun|"\$BUN")\b/);
   });
 });
