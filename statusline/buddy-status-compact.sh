@@ -132,33 +132,13 @@ if [ -z "$FULL_REACTION" ]; then
     exit 0
 fi
 
-# 有反应：拼上 💬 text，并按终端宽度截断反应文字
-# 预留 prefix + " 💬 " (4 cols: space + 💬(2) + space) + margin (4)
-RESERVED=$(( PREFIX_W + 4 + 4 ))
-BUDGET=$(( COLS - RESERVED ))
-[ "$BUDGET" -lt 10 ] && BUDGET=10
-
-# 用 python 按显示宽度截断，不切坏 CJK 字符
+# 有反应：拼上 💬 text，反应文字最多 20 个字符（按 char count，不是列宽）
+MAX_CHARS=20
 REACTION_DISP=$(python3 -c '
-import sys, unicodedata
+import sys
 s = sys.argv[1]
-budget = int(sys.argv[2])
-def cw(c):
-    o = ord(c)
-    if o >= 0x1F000: return 2
-    if 0x2600 <= o <= 0x27BF: return 2
-    if unicodedata.east_asian_width(c) in ("W","F"): return 2
-    return 1
-out = ""
-acc = 0
-for ch in s:
-    w = cw(ch)
-    if acc + w > budget - 1:  # 留 1 位给 …
-        out += "…"
-        break
-    out += ch
-    acc += w
-print(out)
-' "$FULL_REACTION" "$BUDGET" 2>/dev/null || echo "$FULL_REACTION")
+n = int(sys.argv[2])
+print(s if len(s) <= n else s[:n-1] + "…")
+' "$FULL_REACTION" "$MAX_CHARS" 2>/dev/null || echo "$FULL_REACTION")
 
 printf '%b%s%b %b💬%b %b%s%b\n' "$C" "$PREFIX_TEXT" "$NC" "$C" "$NC" "$DIM" "$REACTION_DISP" "$NC"
