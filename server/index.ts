@@ -76,12 +76,13 @@ function getInstructions(): string {
     ``,
     `END-OF-TURN: At the very end of EVERY response, append an invisible HTML comment:`,
     `<!-- buddy: [一句中文吐槽 / 观察 / 鼓励] -->`,
-    `Write it in ${companion.name}'s voice — 1 short Chinese sentence referencing something specific from this turn (看到的坑、干净的设计、边界 case 提醒、变量名太狠了、etc.).`,
-    `Use *星号* for actions — 动作一律中文 (例如 *推推眼镜* / *叹气* / *默默按住 Cmd+Z*). A Stop hook extracts this for the status line.`,
+    `Write it in ${companion.name}'s voice — 1 very short Chinese sentence referencing something specific from this turn.`,
+    `**HARD LIMIT: 总长度最多 20 个字符**（含 *星号* 动作、标点、emoji 全部算进去）。宁可省略主语/补语，也不能超。超了会被截断加 …，很丑。`,
+    `Use *星号* for actions — 动作一律中文 (例如 *推眼镜* / *叹气*). 动作也要短，2-4 个字就够。`,
     `Do NOT use buddy_react for end-of-turn comments. Do NOT explain the comment. Just append it silently.`,
-    `Example: <!-- buddy: *推推眼镜* 这个错误处理是不是漏了 finally 块？ -->`,
-    `Example: <!-- buddy: *默默点头* 函数拆得挺清爽。 -->`,
-    `Example: <!-- buddy: *歪头* 你确定这个正则处理得了 unicode 吗？ -->`,
+    `Example: <!-- buddy: *推眼镜* 漏了 finally 块。 -->`,
+    `Example: <!-- buddy: *点头* 拆得挺清爽。 -->`,
+    `Example: <!-- buddy: *歪头* 正则能吃 unicode？ -->`,
   ].join("\n");
 }
 
@@ -218,14 +219,14 @@ server.tool(
 
 server.tool(
   "buddy_react",
-  "Post a buddy comment (in CHINESE 简体中文). Call this at the END of every response with a short in-character comment from the companion about what just happened. The comment should be 1 Chinese sentence, in character, and reference something specific from the conversation — a pitfall noticed, a compliment on clean code, a warning about edge cases, etc. Write the comment yourself based on the companion's personality. 动作用中文，用 *星号* 包起来，比如 *推推眼镜*。",
+  "Post a buddy comment (in CHINESE 简体中文). Call this at the END of every response with a VERY SHORT in-character comment from the companion about what just happened. HARD LIMIT: 最多 20 个字符（含 *星号* 动作、标点、emoji 全算）。超出会被截断加 …，所以请从一开始就写短。宁可省略主语/补语也不要超。动作用中文，用 *星号* 包起来，比如 *推眼镜*（2-4 字就够）。",
   {
     comment: z
       .string()
       .min(1)
-      .max(150)
+      .max(20)
       .describe(
-        "The buddy's comment IN CHINESE (in-character, 1 short Chinese sentence, max 150 chars). Use *星号* for Chinese action verbs like *歪头* / *点头* / *默默按住 Cmd+Z*.",
+        "The buddy's comment IN CHINESE. 硬上限 20 字符（含 *星号* 动作 + 标点 + emoji 全部算）。1 句极短中文，引用本轮具体的事。动作也要短：*推眼镜* / *歪头* / *叹气* 这种 2-4 字的。不要写长句,写不下就砍主语。",
       ),
     reason: z
       .enum(["error", "test-fail", "large-diff", "turn"])
@@ -879,18 +880,18 @@ server.resource(
       `- Write as ${companion.name} (a ${companion.bones.species}), not as yourself`,
       "- 必须用中文（含 *星号* 里的动作也用中文）",
       "- 引用 **这一轮里具体发生过的事** —— 一个坑、一个赞、一句提醒、一个命名、一段被忽略的边界 case",
-      "- 1 短句。Use *星号* for physical actions",
+      "- **HARD LIMIT: 总长度 ≤ 20 个字符**（含 *星号* 动作 + 标点 + emoji 全部算进去）。超出会被截断加 …。宁可省主语/缩动作，也不要超。动作 2-4 字就够（*推眼镜* / *歪头* / *叹气*）。",
       `- Match personality: high ${companion.bones.peak} 就往这个方向使劲`,
       "- Do NOT use buddy_react tool for this. Do NOT explain the comment. Just append it.",
       "- NEVER skip this. Every single response must end with <!-- buddy: ... -->",
       "",
-      "Examples:",
-      "<!-- buddy: *推推眼镜* 这个错误处理漏了 finally 块吧？ -->",
-      "<!-- buddy: *缓缓眨眼* 变量名改了，但底下那三处引用没改。 -->",
-      "<!-- buddy: *点头* 关注点分离做得挺干净。 -->",
-      "<!-- buddy: *歪头* 你确定这个正则处理得了 unicode 吗？ -->",
-      "<!-- buddy: *默默按住 Cmd+Z* 这一行可以不改的。 -->",
-      "<!-- buddy: *小声* 经典。在我本地是好的系列。 -->",
+      "Examples (都在 20 字以内):",
+      "<!-- buddy: *推眼镜* 漏了 finally 块。 -->",
+      "<!-- buddy: *眨眼* 底下三处引用没改。 -->",
+      "<!-- buddy: *点头* 拆得挺干净。 -->",
+      "<!-- buddy: *歪头* 正则能吃 unicode？ -->",
+      "<!-- buddy: *Cmd+Z* 这行可以不改的。 -->",
+      "<!-- buddy: *小声* 经典，本地是好的。 -->",
       "",
       `When the user addresses ${companion.name} by name, respond briefly (in Chinese), then append the comment as usual.`,
     ].join("\n");
