@@ -256,15 +256,6 @@ BUBBLE=""
 if [ -n "$ACHIEVEMENT" ] && [ "$ACHIEVEMENT" != "null" ] && [ "$ACHIEVEMENT" != "" ]; then
     BUBBLE=$'\xf0\x9f\x8f\x86'" $ACHIEVEMENT"
 fi
-# 反应文字最多 20 个字符（按 char count 截断，超出加 …）
-if [ -n "$REACTION" ] && [ "$REACTION" != "null" ] && [ "$REACTION" != "" ]; then
-    REACTION=$(python3 -c '
-import sys
-s = sys.argv[1]
-n = 20
-print(s if len(s) <= n else s[:n-1] + "…")
-' "$REACTION" 2>/dev/null || echo "$REACTION")
-fi
 REACTION_FILE="$BUDDY_STATE_DIR/reaction.$SID.json"
 REACTION_TTL=0
 CONFIG_FILE="$BUDDY_STATE_DIR/config.json"

@@ -132,13 +132,7 @@ if [ -z "$FULL_REACTION" ]; then
     exit 0
 fi
 
-# 有反应：拼上 💬 text，反应文字最多 20 个字符（按 char count，不是列宽）
-MAX_CHARS=20
-REACTION_DISP=$(python3 -c '
-import sys
-s = sys.argv[1]
-n = int(sys.argv[2])
-print(s if len(s) <= n else s[:n-1] + "…")
-' "$FULL_REACTION" "$MAX_CHARS" 2>/dev/null || echo "$FULL_REACTION")
+# 有反应：直接拼上 💬 text，不做截断（长度由 AI 侧提示词约束到 ≤20 字符）
+REACTION_DISP="$FULL_REACTION"
 
 printf '%b%s%b %b💬%b %b%s%b\n' "$C" "$PREFIX_TEXT" "$NC" "$C" "$NC" "$DIM" "$REACTION_DISP" "$NC"
